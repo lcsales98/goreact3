@@ -1,5 +1,7 @@
-import { createStore } from "redux";
+import { createStore, compose, applyMiddleware } from "redux";
 
-const store = createStore(() => {});
+import reducers from "./reducers";
+
+const store = createStore(reducers, compose(applyMiddleware(...[])));
 
 export default store;
