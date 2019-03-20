@@ -1,55 +1,52 @@
 import React, { Component, Fragment, ComponentState } from "react";
-import PropTypes from "prop-types";
+
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
+import { bindActionCreators } from "redux";
+import * as favActions from "../../store/actions/favorites";
 
-import * as FavoriteActions from "../../store/actions/favorites";
+interface IAppState {
+	repositoryInput: String;
+}
 
-class Main extends Component {
-	static propTypes = {
-		addFavorite: PropTypes.func,
-		favorites: PropTypes.arrayOf(
-			PropTypes.shape({
-				id: PropTypes.number,
-				name: PropTypes.string,
-				description: PropTypes.string,
-				url: PropTypes.string
-			})
-		).isRequired
-	};
+interface IAppProps {
+	addFavorite: any;
+	favorites: any;
+}
 
+class Main extends React.Component<IAppProps, IAppState> {
 	state = {
 		repositoryInput: ""
 	};
 
-	handleAddRepository = (event: any) => {
+	handleAddRepository(event: any) {
 		event.preventDefault();
-		this.props.favorite;
-	};
+		this.props.addFavorite();
+	}
+
 	render() {
 		return (
 			<Fragment>
 				<form onSubmit={this.handleAddRepository}>
 					<input
-						placeholder="usuario/repositório"
+						placeholder="usuario/repositorio"
 						value={this.state.repositoryInput}
 						onChange={e =>
 							this.setState({ repositoryInput: e.target.value })
 						}
 					/>
-					<button type="submit">Enviar</button>
+					<button type="submit">Adicionar</button>
 				</form>
 
 				<ul>
-					{this.props.favorites.map(favorite => (
+					{this.props.favorites.map((favorite: any) => {
 						<li key={favorite.id}>
 							<p>
 								<strong>{favorite.name}</strong> (
 								{favorite.description})
 							</p>
 							<a href={favorite.url}>Link</a>
-						</li>
-					))}
+						</li>;
+					})}
 				</ul>
 			</Fragment>
 		);
@@ -60,10 +57,10 @@ const mapStateToProps = (state: ComponentState) => ({
 	favorites: state.favorites
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) =>
-	bindActionCreators(FavoriteActions, dispatch);
+const mapDispatchToProps = (dispatch: any) =>
+	bindActionCreators(favActions, dispatch);
 
 export default connect(
-	mapDispatchToProps,
-	mapStateToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(Main);
